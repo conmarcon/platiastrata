@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Πλατιά Στράτα - Platia Strata</title>
+    <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c4c38;
+            --primary-dark: #1e3527;
+            --accent: #b85b34;
+            --bg: #fcf8f2;
+            --card: #ffffff;
+            --border: #e2d7c5;
+            --text-dark: #2b2b2b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background: var(--bg); 
+            color: var(--text-dark); 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--primary);
+            color: #fff;
+            text-align: center;
+            padding: 1.2rem 1rem 1rem;
+            border-bottom: 4px solid var(--accent);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .header-logo {
+            max-width: 100%;
+            width: 420px;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            margin-bottom: 0.8rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        /* FLAGS BAR */
+        .flags-bar {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+        }
+
+        .flag-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid transparent;
+            font-size: 1.5rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1;
+        }
+
+        .flag-btn.active, .flag-btn:active {
+            background: var(--accent);
+            border-color: #fff;
+            transform: scale(1.1);
+        }
+
+        .container { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            padding: 1.2rem 1rem; 
+            flex: 1;
+            width: 100%;
+        }
+
+        /* MAIN HERO ACTION BUTTONS */
+        .main-menu-btn-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+            align-items: center;
+        }
+
+        .btn-main-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: #f7e7ce;
+            font-family: 'GFS Didot', serif;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 1.1rem 1.5rem;
+            border: 2px solid var(--accent);
+            border-radius: 16px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(44, 76, 56, 0.25);
+            transition: all 0.2s ease;
+            width: 100%;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-main-action:active {
+            transform: scale(0.98);
+            background: var(--accent);
+            color: #ffffff;
+            border-color: #ffffff;
+        }
+
+        /* CATEGORIES & ITEMS VIEWS */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 480px) {
+            .categories-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .cat-card-btn {
+            background: var(--card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.1rem 0.5rem;
+            text-align: center;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s ease;
+        }
+
+        .cat-card-btn:active {
+            border-color: var(--accent);
+            background: #fdf5ec;
+            transform: scale(0.97);
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #eadecc;
+            color: var(--primary);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 1.2rem;
+        }
+
+        .section-title {
+            font-family: 'GFS Didot', serif;
+            color: var(--primary);
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 0.4rem;
+        }
+
+        .menu-grid { display: grid; grid-template-columns: 1fr; gap: 0.8rem; }
+
+        .menu-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+        }
+
+        .item-title { font-weight: 700; font-size: 1.05rem; color: var(--primary); }
+
+        /* VILLAGE & GALLERY CONTENT */
+        .info-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+            line-height: 1.6;
+        }
+
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 0.6rem;
+            font-family: 'GFS Didot', serif;
+            font-size: 1.3rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        .gallery-item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .gallery-placeholder {
+            width: 100%;
+            height: 120px;
+            background: #e8e0d5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .gallery-caption {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .view-section { display: none; }
+        .view-section.active { display: block; }
+
+        /* FOOTER */
+        footer {
+            background: var(--primary-dark);
+            color: #f7e7ce;
+            padding: 1.8rem 1rem 1.2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 3px solid var(--accent);
+        }
+
+        footer h4 {
+            font-family: 'GFS Didot', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.4rem;
+            color: #fff;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .social-btn:active {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .footer-info {
+            font-size: 0.85rem;
+            color: #d1c7b7;
+            margin-top: 0.8rem;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <!-- Εικόνα Επιγραφής (logo.png) -->
+        <img src="logo.png" alt="Πλατιά Στράτα" class="header-logo">
+        
+        <!-- FLAGS SELECTOR -->
+        <div class="flags-bar">
+            <button class="flag-btn active" data-lang="el" onclick="setLanguage('el')" title="Ελληνικά">🇬🇷</button>
+            <button class="flag-btn" data-lang="en" onclick="setLanguage('en')" title="English">🇬🇧</button>
+            <button class="flag-btn" data-lang="de" onclick="setLanguage('de')" title="Deutsch">🇩🇪</button>
+            <button class="flag-btn" data-lang="fr" onclick="setLanguage('fr')" title="Français">🇫🇷</button>
+            <button class="flag-btn" data-lang="pl" onclick="setLanguage('pl')" title="Polski">🇵🇱</button>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- HOME VIEW (3 ΚΕΝΤΡΙΚΑ ΚΟΥΜΠΙΑ) -->
+        <div id="homeView" class="view-section active">
+            <div class="main-menu-btn-wrapper">
+                <button class="btn-main-action" onclick="showCategoryList()">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span id="ui-btn-menu">Μενού</span>
+                </button>
+                <button class="btn-main-action" onclick="showVillageInfo()">
+                    <i class="fa-solid fa-mountain-sun"></i>
+                    <span id="ui-btn-village">Το Χωριό μας</span>
+                </button>
+                <button class="btn-main-action" onclick="showGallery()">
+                    <i class="fa-solid fa-camera-retro"></i>
+                    <span id="ui-btn-photos">Φωτογραφίες</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- LIST OF MENU CATEGORIES VIEW -->
+        <div id="categoryListView" class="view-section">
+            <button class="btn-back btn-back-home" onclick="showHome()">← Αρχική</button>
+            <h2 class="section-title" style="text-align:center;" id="ui-choose-cat">Επιλέξτε Κατηγορία</h2>
+            
+            <div class="categories-grid">
+                <div class="cat-card-btn" onclick="showCategory('salads')">🥗<br><span id="cat-salads">Σαλάτες</span></div>
+                <div class="cat-card-btn" onclick="showCategory('appetizers')">🧆<br><span id="cat-appetizers">Ορεκτικά</span></div>
+                <div class="cat-card-btn" onclick="showCategory('omelettes')">🍳<br><span id="cat-omelettes">Ομελέτες & Πίτσες</span></div>
+                <div class="cat-card-btn" onclick="showCategory('grill')">🥩<br><span id="cat-grill">Της Ώρας</span></div>
+                <div class="cat-card-btn" onclick="showCategory('spit')">🍖<br><span id="cat-spit">Σούβλας</span></div>
+                <div class="cat-card-btn" onclick="showCategory('drinks')">🍺<br><span id="cat-drinks">Ποτά & Ρακές</span></div>
+                <div class="cat-card-btn" onclick="showCategory('coffee')">☕<br><span id="cat-coffee">Καφέδες</span></div>
+            </div>
+        </div>
+
+        <!-- SINGLE CATEGORY ITEMS VIEW -->
+        <div id="categoryItemsView" class="view-section">
+            <button class="btn-back btn-back-cats" onclick="showCategoryList()">← Κατηγορίες</button>
+            <h2 class="section-title" id="currentCategoryTitle">Κατηγορία</h2>
+            <div class="menu-grid" id="categoryItemsContainer"></div>
+        </div>
+
+        <!-- VILLAGE INFO VIEW -->
+        <div id="villageView" class="view-section">
+            <button class="btn-back btn-back-home" onclick="showHome()">← Αρχική</button>
+            <h2 class="section-title" id="ui-village-title">Έξω Μουλιανά Σητείας</h2>
+            
+            <div class="info-card">
+                <h3 id="ui-vcard1-title">📍 Το Χωριό μας</h3>
+                <p id="ui-vcard1-text">Τα Έξω Μουλιανά είναι ένα γραφικό παραδοσιακό χωριό της ανατολικής Кρήτης, χτισμένο στους πρόποδες των βουνών της Σητείας. Φημίζεται για τη φιλοξενία των κατοίκων του, το εξαιρετικό παρθένο ελαιόλαδο, το καλό κρασί και την παραδοσιακή τσικουδιά.</p>
+            </div>
+
+            <div class="info-card">
+                <h3 id="ui-vcard2-title">🌿 Φαράγγι του Ρίχτη</h3>
+                <p id="ui-vcard2-text">Πολύ κοντά στο χωριό βρίσκεται το περίφημο Φαράγγι του Ρίχτη με τον καταρράκτη ύψους 20 μέτρων, μια καταπράσινη διαδρομή που προσελκύει πεζοπόρους από όλο τον κόσμο.</p>
+            </div>
+        </div>
+
+        <!-- GALLERY VIEW -->
+        <div id="galleryView" class="view-section">
+            <button class="btn-back btn-back-home" onclick="showHome()">← Αρχική</button>
+            <h2 class="section-title" id="ui-gallery-title">Φωτογραφίες</h2>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="gallery-placeholder"><i class="fa-solid fa-utensils"></i></div>
+                    <div class="gallery-caption" id="ui-gcap1">Μεζέδες & Ρακή</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder"><i class="fa-solid fa-fire-burner"></i></div>
+                    <div class="gallery-caption" id="ui-gcap2">Της Ώρας στα Κάρβουνα</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder"><i class="fa-solid fa-store"></i></div>
+                    <div class="gallery-caption" id="ui-gcap3">Ο Χώρος μας</div>
+                </div>
+                <div class="gallery-item">
+                    <div class="gallery-placeholder"><i class="fa-solid fa-water"></i></div>
+                    <div class="gallery-caption" id="ui-gcap4">Καταρράκτης Ρίχτη</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER WITH SOCIAL MEDIA & MAPS -->
+    <footer>
+        <h4 id="ui-footer-title">Πλατιά Στράτα</h4>
+        <p style="font-size:0.9rem; opacity:0.9;" id="ui-footer-sub">Έξω Μουλιανά, Σητεία</p>
+        
+        <div class="social-links">
+            <a href="tel:2843095201" class="social-btn" title="Τηλέφωνο"><i class="fa-solid fa-phone"></i></a>
+            <a href="https://maps.google.com/?q=Exo+Mouliana+Sitia" target="_blank" class="social-btn" title="Google Maps"><i class="fa-solid fa-location-dot"></i></a>
+            <a href="#" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="social-btn" title="TripAdvisor"><i class="fa-brands fa-tripadvisor"></i></a>
+        </div>
+
+        <div class="footer-info">
+            <p id="ui-footer-hours">⏰ Ανοιχτά καθημερινά</p>
+            <p style="margin-top:0.3rem; opacity:0.7; font-size:0.75rem;">© Platia Strata - Digital Menu</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentLang = 'el';
+        let currentCatKey = '';
+
+        const i18nUI = {
+            el: { 
+                btnMenu: "Μενού", 
+                btnVillage: "Το Χωριό μας",
+                btnPhotos: "Φωτογραφίες",
+                chooseCat: "Επιλέξτε Κατηγορία", 
+                backHome: "← Αρχική", 
+                backCats: "← Κατηγορίες",
+                villageTitle: "Έξω Μουλιανά Σητείας",
+                vcard1Title: "📍 Το Χωριό μας",
+                vcard1Text: "Τα Έξω Μουλιανά είναι ένα γραφικό παραδοσιακό χωριό της ανατολικής Κρήτης, χτισμένο στους πρόποδες των βουνών της Σητείας. Φημίζεται για τη φιλοξενία των κατοίκων του, το εξαιρετικό παρθένο ελαιόλαδο, το καλό κρασί και την παραδοσιακή τσικουδιά.",
+                vcard2Title: "🌿 Φαράγγι του Ρίχτη",
+                vcard2Text: "Πολύ κοντά στο χωριό βρίσκεται το περίφημο Φαράγγι του Ρίχτη με τον καταρράκτη ύψους 20 μέτρων, μια καταπράσινη διαδρομή που προσελκύει πεζοπόρους από όλο τον κόσμο.",
+                galleryTitle: "Φωτογραφίες",
+                gcap1: "Μεζέδες & Ρακή",
+                gcap2: "Της Ώρας στα Κάρβουνα",
+                gcap3: "Ο Χώρος μας",
+                gcap4: "Καταρράκτης Ρίχτη",
+                footerTitle: "Πλατιά Στράτα",
+                footerSub: "Έξω Μουλιανά, Σητεία",
+                footerHours: "⏰ Ανοιχτά καθημερινά"
+            },
+            en: { 
+                btnMenu: "Menu", 
+                btnVillage: "Our Village",
+                btnPhotos: "Photos",
+                chooseCat: "Select Category", 
+                backHome: "← Home", 
+                backCats: "← Categories",
+                villageTitle: "Exo Mouliana Sitia",
+                vcard1Title: "📍 Our Village",
+                vcard1Text: "Exo Mouliana is a picturesque traditional village in eastern Crete. Famous for local hospitality, extra virgin olive oil, fine wine, and traditional Cretan Raki.",
+                vcard2Title: "🌿 Richtis Gorge",
+                vcard2Text: "Nearby lies the famous Richtis Gorge with its impressive 20-meter waterfall, a lush green hiking trail loved by visitors worldwide.",
+                galleryTitle: "Photos",
+                gcap1: "Meze & Raki",
+                gcap2: "Grilled Delights",
+                gcap3: "Our Place",
+                gcap4: "Richtis Waterfall",
+                footerTitle: "Platia Strata",
+                footerSub: "Exo Mouliana, Sitia",
+                footerHours: "⏰ Open Daily"
+            },
+            de: { 
+                btnMenu: "Speisekarte", 
+                btnVillage: "Unser Dorf",
+                btnPhotos: "Fotos",
+                chooseCat: "Kategorie Wählen", 
+                backHome: "← Startseite", 
+                backCats: "← Kategorien",
+                villageTitle: "Exo Mouliana Sitia",
+                vcard1Title: "📍 Unser Dorf",
+                vcard1Text: "Exo Mouliana ist ein malerisches traditionelles Dorf im Osten Kretas. Bekannt für kretische Gastfreundschaft, Olivenöl, Wein und Raki.",
+                vcard2Title: "🌿 Richtis Schlucht",
+                vcard2Text: "In der Nähe befindet sich die berühmte Richtis-Schlucht mit ihrem 20 Meter hohen Wasserfall.",
+                galleryTitle: "Fotos",
+                gcap1: "Meze & Raki",
+                gcap2: "Vom Grill",
+                gcap3: "Unser Lokal",
+                gcap4: "Richtis Wasserfall",
+                footerTitle: "Platia Strata",
+                footerSub: "Exo Mouliana, Sitia",
+                footerHours: "⏰ Täglich geöffnet"
+            },
+            fr: { 
+                btnMenu: "Menu", 
+                btnVillage: "Notre Village",
+                btnPhotos: "Photos",
+                chooseCat: "Sélectionnez une Catégorie", 
+                backHome: "← Accueil", 
+                backCats: "← Catégories",
+                villageTitle: "Exo Mouliana Sitia",
+                vcard1Title: "📍 Notre Village",
+                vcard1Text: "Exo Mouliana est un village traditionnel pittoresque de l'est de la Crète, célèbre pour son hospitalité, son huile d'olive et son raki.",
+                vcard2Title: "🌿 Gorges de Richtis",
+                vcard2Text: "À proximité se trouvent les célèbres gorges de Richtis avec leur cascade impressionnante de 20 mètres.",
+                galleryTitle: "Photos",
+                gcap1: "Meze & Raki",
+                gcap2: "Grillades",
+                gcap3: "Notre Espace",
+                gcap4: "Cascade de Richtis",
+                footerTitle: "Platia Strata",
+                footerSub: "Exo Mouliana, Sitia",
+                footerHours: "⏰ Ouvert tous les jours"
+            },
+            pl: { 
+                btnMenu: "Menu", 
+                btnVillage: "Nasza Wioska",
+                btnPhotos: "Zdjęcia",
+                chooseCat: "Wybierz Kategorię", 
+                backHome: "← Strona Główna", 
+                backCats: "← Kategorie",
+                villageTitle: "Exo Mouliana Sitia",
+                vcard1Title: "📍 Nasza Wioska",
+                vcard1Text: "Exo Mouliana to malownicza tradycyjna wioska we wschodniej Krecie, znana z gościnności, oliwy z oliwek, wina i raki.",
+                vcard2Title: "🌿 Wąwóz Richtis",
+                vcard2Text: "W pobliżu znajduje się słynny wąwóz Richtis z imponującym 20-metrowym wodospadem.",
+                galleryTitle: "Zdjęcia",
+                gcap1: "Meze & Raki",
+                gcap2: "Dania z Grilla",
+                gcap3: "Nasz Lokal",
+                gcap4: "Wodospad Richtis",
+                footerTitle: "Platia Strata",
+                footerSub: "Exo Mouliana, Sitia",
+                footerHours: "⏰ Otwarte codziennie"
+            }
+        };
+
+        const menuData = {
+            salads: {
+                catNames: { el: "🥗 Σαλάτες", en: "🥗 Salads", de: "🥗 Salate", fr: "🥗 Salades", pl: "🥗 Sałatki" },
+                items: [
+                    { id: 1, name: { el: "Χωριάτικη", en: "Greek Salad", de: "Griechischer Salat", fr: "Salade Grecque", pl: "Sałatka Grecka" } },
+                    { id: 2, name: { el: "Μαρούλι", en: "Lettuce Salad", de: "Lattichsalat", fr: "Salade de Laitue", pl: "Sałata Zielona" } },
+                    { id: 3, name: { el: "Λάχανο - Καρότο", en: "Cabbage & Carrot", de: "Kohl & Karotten", fr: "Chou & Carotte", pl: "Kapusta & Marchewka" } }
+                ]
+            },
+            appetizers: {
+                catNames: { el: "🧆 Ορεκτικά", en: "🧆 Appetizers", de: "🧆 Vorspeisen", fr: "🧆 Entrées", pl: "🧆 Przystawki" },
+                items: [
+                    { id: 4, name: { el: "Τζατζίκι", en: "Tzatziki", de: "Tzatziki", fr: "Tzatziki", pl: "Tzatziki" } },
+                    { id: 5, name: { el: "Ξύγαλο", en: "Xygalo Cheese", de: "Xygalo Käse", fr: "Fromage Xygalo", pl: "Ser Xygalo" } },
+                    { id: 6, name: { el: "Τυροκροκέτες", en: "Cheese Croquettes", de: "Käsekroketten", fr: "Croquettes de Fromage", pl: "Krokiety Serowe" } },
+                    { id: 7, name: { el: "Ντολμαδάκια", en: "Stuffed Vine Leaves", de: "Gefüllte Weinblätter", fr: "Feuilles de Vigne Farcies", pl: "Gołąbki w Liściach Winogron" } },
+                    { id: 8, name: { el: "Ντάκος", en: "Cretan Dakos", de: "Kretischer Dakos", fr: "Dakos Crétois", pl: "Dakos Kreteński" } },
+                    { id: 9, name: { el: "Φάβα", en: "Yellow Split Pea Puree (Fava)", de: "Fava-Püree", fr: "Purée de Fava", pl: "Purée z Żółtego Grochu (Fava)" } },
+                    { id: 10, name: { el: "Μπερκί Μεζέ", en: "Bekri Meze (Spicy Pork Stew)", de: "Bekri Meze", fr: "Bekri Meze", pl: "Bekri Meze (Gulasz)" } },
+                    { id: 11, name: { el: "Πατάτες τηγανιτές", en: "French Fries", de: "Pommes Frites", fr: "Frites", pl: "Frytki" } },
+                    { id: 12, name: { el: "Κολοκυθάκια τηγανητά", en: "Fried Zucchini", de: "Frittierte Zucchini", fr: "Courgettes Frites", pl: "Smażona Cukinia" } },
+                    { id: 13, name: { el: "Στάκα με αυγά", en: "Staka Butter with Eggs", de: "Staka-Butter mit Eiern", fr: "Beurre Staka aux Œufs", pl: "Masło Staka z Jajkami" } },
+                    { id: 14, name: { el: "Νεράτη", en: "Nerati Pie", de: "Nerati-Kuchen", fr: "Tarte Nerati", pl: "Placek Nerati" } },
+                    { id: 15, name: { el: "Τυροαπιτάκια", en: "Small Cheese Pies", de: "Kleine Käsetaschen", fr: "Feuilletés au Fromage", pl: "Pierożki z Serem" } },
+                    { id: 16, name: { el: "Λαχανοπιτάκια", en: "Small Herb Pies", de: "Kleine Kräutertaschen", fr: "Feuilletés aux Herbes", pl: "Pierożki z Ziołami" } },
+                    { id: 17, name: { el: "Φέτα λαδορίγανη", en: "Feta Cheese with Olive Oil & Oregano", de: "Feta-Käse mit Olivenöl & Oregano", fr: "Féta à l'Huile d'Olive et Origan", pl: "Feta z Oliwą i Oregano" } },
+                    { id: 18, name: { el: "Λουκάνικο Χωριάτικο", en: "Traditional Sausage", de: "Bauernsalami / Wurst", fr: "Saucisse Traditionnelle", pl: "Kiełbasa Wiejska" } }
+                ]
+            },
+            omelettes: {
+                catNames: { el: "🍳 Ομελέτες & Πίτσες", en: "🍳 Omelettes & Pizzas", de: "🍳 Omeletts & Pizzas", fr: "🍳 Omelettes & Pizzas", pl: "🍳 Omlety & Pizza" },
+                items: [
+                    { id: 19, name: { el: "Ομελέτα Σπέσιαλ Μεγάλη", en: "Special Omelette Large", de: "Spezial-Omelett Groß", fr: "Grande Omelette Spéciale", pl: "Omlet Specjalny Duży" } },
+                    { id: 20, name: { el: "Ομελέτα Σπέσιαλ Μικρή", en: "Special Omelette Small", de: "Spezial-Omelett Klein", fr: "Petite Omelette Spéciale", pl: "Omlet Specjalny Mały" } },
+                    { id: 21, name: { el: "Τοστ", en: "Toast Sandwich", de: "Toast-Sandwich", fr: "Sandwich Toast", pl: "Tost" } },
+                    { id: 22, name: { el: "Πίτσα Σπέσιαλ μεγάλη", en: "Special Pizza Large", de: "Spezial-Pizza Groß", fr: "Grande Pizza Spéciale", pl: "Pizza Specjalna Duża" } },
+                    { id: 23, name: { el: "Πίτσα Σπέσιαλ μικρή", en: "Special Pizza Small", de: "Spezial-Pizza Klein", fr: "Petite Pizza Spéciale", pl: "Pizza Specjalna Mała" } },
+                    { id: 24, name: { el: "Πίτσα Γίγας", en: "Giant Pizza", de: "Riesenpizza", fr: "Pizza Géante", pl: "Pizza Gigant" } }
+                ]
+            },
+            grill: {
+                catNames: { el: "🥩 Της Ώρας", en: "🥩 Grilled Items", de: "🥩 Vom Grill", fr: "🥩 Grillades", pl: "🥩 Dania z Grilla" },
+                items: [
+                    { id: 25, name: { el: "Σουβλάκι χοιρινό (τεμάχιο)", en: "Pork Souvlaki (skewer)", de: "Schweine-Souvlaki (Spieß)", fr: "Souvlaki de Porc (brochette)", pl: "Szaszłyk Wieprzowy" } },
+                    { id: 26, name: { el: "Σουβλάκι κοτόπουλο (τεμάχιο)", en: "Chicken Souvlaki (skewer)", de: "Hähnchen-Souvlaki (Spieß)", fr: "Souvlaki de Poulet (brochette)", pl: "Szaszłyk z Kurczaka" } },
+                    { id: 27, name: { el: "Πανσέτα 1kg", en: "Pork Belly (Pancetta) 1kg", de: "Schweinebauch 1kg", fr: "Poitrine de Porc 1kg", pl: "Boczek 1kg" } },
+                    { id: 28, name: { el: "Πανσέτα μερίδα", en: "Pork Belly Portion", de: "Schweinebauch Portion", fr: "Portion Poitrine de Porc", pl: "Porcja Boczku" } },
+                    { id: 29, name: { el: "Παιδάκια κοτόπουλο 1kg", en: "Chicken Chops 1kg", de: "Hähnchenkoteletts 1kg", fr: "Côtelettes de Poulet 1kg", pl: "Kawałki Kurczaka 1kg" } },
+                    { id: 30, name: { el: "Παιδάκια κοτόπουλο μερίδα", en: "Chicken Chops Portion", de: "Hähnchenkoteletts Portion", fr: "Portion Côtelettes de Poulet", pl: "Porcja Kurczaka" } },
+                    { id: 31, name: { el: "Μπριζόλα χοιρινή", en: "Pork Chop", de: "Schweinekotelett", fr: "Côte de Porc", pl: "Kotlet Wieprzowy" } },
+                    { id: 32, name: { el: "Κοτόπουλο φιλέτο", en: "Chicken Fillet", de: "Hähnchenbrustfilet", fr: "Filet de Poulet", pl: "Filet z Kurczaka" } },
+                    { id: 33, name: { el: "Μπιφτέκια μερίδα", en: "Beef Burgers Portion", de: "Frikadellen Portion", fr: "Portion Steaks Hachés", pl: "Burger Wołowy Porcja" } },
+                    { id: 34, name: { el: "Κεμπάπ τεμάχιο", en: "Kebab (piece)", de: "Kebab (Stück)", fr: "Kebab (pièce)", pl: "Kebab (sztuka)" } },
+                    { id: 35, name: { el: "Κεμπάπ μερίδα", en: "Kebab Portion", de: "Kebab Portion", fr: "Portion Kebab", pl: "Porcja Kebabu" } },
+                    { id: 36, name: { el: "Παιδάκια αρνίσια μερίδα", en: "Lamb Chops Portion", de: "Lammkoteletts Portion", fr: "Portion Côtelettes d'Agneau", pl: "Żeberka Jagnięce Porcja" } },
+                    { id: 37, name: { el: "Παιδάκια αρνίσια 1 kg", en: "Lamb Chops 1kg", de: "Lammkoteletts 1kg", fr: "Côtelettes d'Agneau 1kg", pl: "Żeberka Jagnięce 1kg" } },
+                    { id: 38, name: { el: "Ποικιλία κρεατικών μικρή", en: "Mixed Grill Small", de: "Gemischter Grillteller Klein", fr: "Assortiment de Viandes Petit", pl: "Zestaw Mięs Mały" } },
+                    { id: 39, name: { el: "Ποικιλία κρεατικών μεγάλη", en: "Mixed Grill Large", de: "Gemischter Grillteller Groß", fr: "Assortiment de Viandes Grand", pl: "Zestaw Mięs Duży" } }
+                ]
+            },
+            spit: {
+                catNames: { el: "🍖 Σούβλας", en: "🍖 Spit-Roasted", de: "🍖 Vom Spieß", fr: "🍖 À la Broche", pl: "🍖 Z Rożna" },
+                items: [
+                    { id: 40, name: { el: "Κοντοσούβλι Κοτόπουλο μερίδα", en: "Kontosouvli Chicken Portion", de: "Hähnchen Kontosouvli", fr: "Poulet Kontosouvli", pl: "Kontosouvli z Kurczaka" } },
+                    { id: 41, name: { el: "Κοντοσούβλι Χοιρινό μερίδα", en: "Kontosouvli Pork Portion", de: "Schweine Kontosouvli", fr: "Porc Kontosouvli", pl: "Kontosouvli Wieprzowe" } },
+                    { id: 42, name: { el: "Αρνί μερίδα", en: "Spit Lamb Portion", de: "Lamm vom Spieß Portion", fr: "Agneau à la Broche Portion", pl: "Jagnięcina z Rożna Porcja" } },
+                    { id: 43, name: { el: "Αρνί 1 kg", en: "Spit Lamb 1kg", de: "Lamm vom Spieß 1kg", fr: "Agneau à la Broche 1kg", pl: "Jagnięcina z Rożna 1kg" } },
+                    { id: 44, name: { el: "Κότα", en: "Roasted Hen", de: "Gebratenes Huhn", fr: "Poule Rôtie", pl: "Kura Pieczona" } },
+                    { id: 45, name: { el: "Κοτόπουλο ολόκληρο", en: "Whole Spit Chicken", de: "Ganzes Hähnchen", fr: "Poulet Entier", pl: "Cały Kurczak z Rożna" } },
+                    { id: 46, name: { el: "Πανσέτα μερίδα", en: "Spit Pork Belly Portion", de: "Schweinebauch vom Spieß", fr: "Poitrine de Porc à la Broche", pl: "Boczek z Rożna Porcja" } }
+                ]
+            },
+            drinks: {
+                catNames: { el: "🍺 Ποτά & Ρακές", en: "🍺 Drinks & Raki", de: "🍺 Getränke & Raki", fr: "🍺 Boissons & Raki", pl: "🍺 Napoje & Raki" },
+                items: [
+                    { id: 47, name: { el: "Μπίρα Amstel / Fix / Mythos / Alfa", en: "Beer Amstel / Fix / Mythos / Alfa", de: "Bier Amstel / Fix / Mythos / Alfa", fr: "Bière Amstel / Fix / Mythos / Alfa", pl: "Piwo Amstel / Fix / Mythos / Alfa" } },
+                    { id: 48, name: { el: "Μπίρα Kaiser", en: "Beer Kaiser", de: "Bier Kaiser", fr: "Bière Kaiser", pl: "Piwo Kaiser" } },
+                    { id: 49, name: { el: "Heineken / Mamos", en: "Beer Heineken / Mamos", de: "Bier Heineken / Mamos", fr: "Bière Heineken / Mamos", pl: "Piwo Heineken / Mamos" } },
+                    { id: 50, name: { el: "Ρακή Καραφάκι Διπλό", en: "Cretan Raki Double Karafe", de: "Kretischer Raki Doppelt", fr: "Raki Crétois Double", pl: "Raki Kreteńskie Podwójne" } },
+                    { id: 51, name: { el: "Κρασί Λευκό 500 ml", en: "White Wine 500ml", de: "Weißwein 500ml", fr: "Vin Blanc 500ml", pl: "Wino Białe 500ml" } },
+                    { id: 52, name: { el: "Κρασί Λευκό 1 kg", en: "White Wine 1kg", de: "Weißwein 1kg", fr: "Vin Blanc 1kg", pl: "Wino Białe 1kg" } },
+                    { id: 53, name: { el: "Κρασί Κόκκινο 500 ml", en: "Red Wine 500ml", de: "Rotwein 500ml", fr: "Vin Rouge 500ml", pl: "Wino Czerwone 500ml" } },
+                    { id: 54, name: { el: "Κρασί Κόκκινο 1 kg", en: "Red Wine 1kg", de: "Rotwein 1kg", fr: "Vin Rouge 1kg", pl: "Wino Czerwone 1kg" } },
+                    { id: 55, name: { el: "Φρέσκος χυμός Πορτοκάλι", en: "Fresh Orange Juice", de: "Frischer Orangensaft", fr: "Jus d'Orange Frais", pl: "Świeży Sok Pomarańczowy" } },
+                    { id: 56, name: { el: "Αναψυκτικά (Pepsi/7up/Ήβη/Σόδα)", en: "Soft Drinks (Pepsi/7up/Soda)", de: "Erfrischungsgetränke", fr: "Boissons Gazeuses", pl: "Napoje Gazowane" } },
+                    { id: 57, name: { el: "Coca Cola / Coca Cola Zero", en: "Coca Cola / Zero", de: "Coca Cola / Zero", fr: "Coca Cola / Zero", pl: "Coca Cola / Zero" } },
+                    { id: 58, name: { el: "Ice Tea - ροδάκινο / λεμόνι", en: "Ice Tea Peach / Lemon", de: "Eistee Pfirsich / Zitrone", fr: "Thé Glacé Pêche / Citron", pl: "Herbata Mrożona Brzoskwinia / Cytryna" } },
+                    { id: 59, name: { el: "Φλωράλ", en: "Floral Soda", de: "Floral Soda", fr: "Floral Soda", pl: "Napój Floral" } },
+                    { id: 60, name: { el: "Νερό 750 ml", en: "Water 750ml", de: "Wasser 750ml", fr: "Eau 750ml", pl: "Woda 750ml" } },
+                    { id: 61, name: { el: "Νερό 1 L", en: "Water 1L", de: "Wasser 1L", fr: "Eau 1L", pl: "Woda 1L" } },
+                    { id: 62, name: { el: "Ανθρακούχο νερό", en: "Sparkling Water", de: "Wasser mit Kohlensäure", fr: "Eau Pétillante", pl: "Woda Gazowana" } }
+                ]
+            },
+            coffee: {
+                catNames: { el: "☕ Καφέδες", en: "☕ Coffee & Drinks", de: "☕ Kaffee & Getränke", fr: "☕ Café & Boissons", pl: "☕ Kawa i Napoje" },
+                items: [
+                    { id: 63, name: { el: "Ελληνικός μονός", en: "Greek Coffee Single", de: "Griechischer Kaffee Einfach", fr: "Café Grec Simple", pl: "Kawa Grecka Pojedyncza" } },
+                    { id: 64, name: { el: "Ελληνικός διπλός", en: "Greek Coffee Double", de: "Griechischer Kaffee Doppelt", fr: "Café Grec Double", pl: "Kawa Grecka Podwójna" } },
+                    { id: 65, name: { el: "Νες - Φραπέ", en: "Nescafe / Frappe", de: "Nescafe / Frappe", fr: "Nescafé / Frappé", pl: "Nescafe / Frappe" } },
+                    { id: 66, name: { el: "Καφές Φίλτρου", en: "Filter Coffee", de: "Filterkaffee", fr: "Café Filtre", pl: "Kawa Przelewowa" } },
+                    { id: 67, name: { el: "Espresso μονό", en: "Espresso Single", de: "Espresso Einfach", fr: "Espresso Simple", pl: "Espresso Pojedyncze" } },
+                    { id: 68, name: { el: "Espresso διπλό", en: "Espresso Double", de: "Espresso Doppelt", fr: "Espresso Double", pl: "Espresso Podwójne" } },
+                    { id: 69, name: { el: "Freddo Espresso", en: "Freddo Espresso", de: "Freddo Espresso", fr: "Freddo Espresso", pl: "Freddo Espresso" } },
+                    { id: 70, name: { el: "Freddo Cappuccino", en: "Freddo Cappuccino", de: "Freddo Cappuccino", fr: "Freddo Cappuccino", pl: "Freddo Cappuccino" } },
+                    { id: 71, name: { el: "Cappuccino μονό", en: "Cappuccino Single", de: "Cappuccino Einfach", fr: "Cappuccino Simple", pl: "Cappuccino Pojedyncze" } },
+                    { id: 72, name: { el: "Cappuccino διπλό", en: "Cappuccino Double", de: "Cappuccino Doppelt", fr: "Cappuccino Double", pl: "Cappuccino Podwójne" } },
+                    { id: 73, name: { el: "Σοκολάτα Ζεστή - Κρύα", en: "Hot / Cold Chocolate", de: "Heiße / Kalte Schokolade", fr: "Chocolat Chaud / Froid", pl: "Czekolada na Gorąco / Zimno" } },
+                    { id: 74, name: { el: "Αφεψήματα", en: "Herbal Tea", de: "Kräutertee", fr: "Tisane", pl: "Herbata Ziołowa" } }
+                ]
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            
+            // Highlight active flag
+            document.querySelectorAll('.flag-btn').forEach(btn => {
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const t = i18nUI[lang];
+            
+            // UI elements
+            document.getElementById('ui-btn-menu').innerText = t.btnMenu;
+            document.getElementById('ui-btn-village').innerText = t.btnVillage;
+            document.getElementById('ui-btn-photos').innerText = t.btnPhotos;
+            document.getElementById('ui-choose-cat').innerText = t.chooseCat;
+            
+            document.querySelectorAll('.btn-back-home').forEach(btn => {
+                btn.innerText = t.backHome;
+            });
+            
+            document.querySelectorAll('.btn-back-cats').forEach(btn => {
+                btn.innerText = t.backCats;
+            });
+
+            // Village View
+            document.getElementById('ui-village-title').innerText = t.villageTitle;
+            document.getElementById('ui-vcard1-title').innerText = t.vcard1Title;
+            document.getElementById('ui-vcard1-text').innerText = t.vcard1Text;
+            document.getElementById('ui-vcard2-title').innerText = t.vcard2Title;
+            document.getElementById('ui-vcard2-text').innerText = t.vcard2Text;
+
+            // Gallery View
+            document.getElementById('ui-gallery-title').innerText = t.galleryTitle;
+            document.getElementById('ui-gcap1').innerText = t.gcap1;
+            document.getElementById('ui-gcap2').innerText = t.gcap2;
+            document.getElementById('ui-gcap3').innerText = t.gcap3;
+            document.getElementById('ui-gcap4').innerText = t.gcap4;
+
+            // Footer
+            document.getElementById('ui-footer-title').innerText = t.footerTitle;
+            document.getElementById('ui-footer-sub').innerText = t.footerSub;
+            document.getElementById('ui-footer-hours').innerText = t.footerHours;
+
+            // Categories
+            document.getElementById('cat-salads').innerText = menuData.salads.catNames[lang].replace('🥗 ', '');
+            document.getElementById('cat-appetizers').innerText = menuData.appetizers.catNames[lang].replace('🧆 ', '');
+            document.getElementById('cat-omelettes').innerText = menuData.omelettes.catNames[lang].replace('🍳 ', '');
+            document.getElementById('cat-grill').innerText = menuData.grill.catNames[lang].replace('🥩 ', '');
+            document.getElementById('cat-spit').innerText = menuData.spit.catNames[lang].replace('🍖 ', '');
+            document.getElementById('cat-drinks').innerText = menuData.drinks.catNames[lang].replace('🍺 ', '');
+            document.getElementById('cat-coffee').innerText = menuData.coffee.catNames[lang].replace('☕ ', '');
+
+            if (currentCatKey) {
+                showCategory(currentCatKey);
+            }
+        }
+
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            currentCatKey = '';
+            switchView('homeView');
+        }
+
+        function showCategoryList() {
+            currentCatKey = '';
+            switchView('categoryListView');
+        }
+
+        function showVillageInfo() {
+            currentCatKey = '';
+            switchView('villageView');
+        }
+
+        function showGallery() {
+            currentCatKey = '';
+            switchView('galleryView');
+        }
+
+        function showCategory(catKey) {
+            currentCatKey = catKey;
+            const cat = menuData[catKey];
+            document.getElementById('currentCategoryTitle').innerText = cat.catNames[currentLang];
+            
+            const container = document.getElementById('categoryItemsContainer');
+            container.innerHTML = '';
+
+            cat.items.forEach(item => {
+                const itemName = item.name[currentLang];
+                container.innerHTML += `
+                    <div class="menu-item">
+                        <div class="item-title">${itemName}</div>
+                    </div>
+                `;
+            });
+
+            switchView('categoryItemsView');
+        }
+    </script>
+</body>
+</html>
